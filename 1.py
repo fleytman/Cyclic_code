@@ -1,22 +1,10 @@
-# -*- coding: utf8 -*-
-#'Введите порождающий полином P(x) в бинарном виде только 0 и 1'
-
-#def sdvig():
-#	pass
-#def fun_xor():
-#	pass
-
-
 px = int(raw_input(),2) # int(a,2) = a in bin
-str_px = bin(px)[2:] #Срез для избавления от 0b строке
-operand = ['']
-operand[0]= 'fun_xor'
-i = 1
+str_px = bin(px)[2:] #Srez dlja izbavlenija ot 0b stroke
+operand = []
+operand.append('fun_xor')
 while str_px[1:]:
-	if str_px[i] == '0':
-		operand[i] = 'sdvig'
-	if str_px[i] == '1':
-		operand[i] = 'fun_xor'
-	i-=1
-	
-
+    if str_px[0] == '0':
+        operand.append('sdvig')
+    if str_px[0] == '1':
+        operand.append('fun_xor')
+    str_px = str_px[1:]
