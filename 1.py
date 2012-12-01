@@ -8,9 +8,9 @@ while str_px[1:]:
 	if str_px[i] == '0': operand[i] = sdvig
 	if str_px[i] == '1': operand[i] = fun_xor
 	i-=1
-def sdvig:
+def sdvig():
 	pass
-def fun_xor:
+def fun_xor():
 	pass
 
 	
