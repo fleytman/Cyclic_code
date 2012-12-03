@@ -20,16 +20,12 @@ def operands(px):
 operands = operands(px)
 
 def gx2(gx, px):
-    return gx * px.bit_length()
+    return bin(gx) + "0"*px.bit_length()
 gx2 = gx2(gx,px)
 
-
-
 def algoritm():
-##    print gx2,operands
+    print gx2,operands
     ost = []
-    while gx2:
-        pass
-
+##    while bin(gx2):
 
 algoritm()
