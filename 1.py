@@ -23,9 +23,12 @@ def gx2(gx, px):
     return bin(gx) + "0"*px.bit_length()
 gx2 = gx2(gx,px)
 
-def algoritm():
-    print gx2,operands
+def algoritm(px):
+    st = []
+    ##itrigers = lamda px.bit_length(), st.append('0')
+    print "gx2 =",gx2,"\noperands = ",operands##, "\ntrigers=" , trigers
     ost = []
+    ##print trigers[1] 
 ##    while bin(gx2):
 
-algoritm()
+algoritm(px)
