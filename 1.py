@@ -30,16 +30,18 @@ def algoritm(px,gx2):
     st = list(px.bit_length()* "0")
     while gx != []:
         i = 0
+        print st, " | ", gx
         head = gx.pop(0)
-
-        print st, "  ", gx
+        print st, " | ", gx
+        oppa = st + ["test"]
+        oppa.pop(len(oppa)-1)
         while i < len(st) - 1:
-            oppa = st
-            if operands[i] == 'fun_xor': st[i] = str(int(st[i]).__xor__(int(oppa[i+1])))
+            if operands[i] == 'fun_xor': st[i] = str(int(oppa[0]).__xor__(int(oppa[i+1])))
             else: st[i] = str(oppa[i+1])
             i+=1
-        print st, "  ", gx
+##            print st, " | "#, gx
         st[len(st) - 1] = str(int(oppa[0]).__xor__(int(head)))
+    print st, " | ", gx
     print "gx =",gx,"\noperands = ",operands, "\nst=" , st
     print operands
 ##    while bin(gx2):
