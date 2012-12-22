@@ -1,10 +1,10 @@
 import string
 ##px = int(raw_input('vvedite px'),2) # int(a,2) = a in bin
 px = int('10011', 2)
-##px = int(raw_input('vvedite A'),2) # int(a,2) = a in bin
+##gx = int(raw_input('vvedite A'),2) # int(a,2) = a in bin
 gx = int('101101101', 2)
 
-def operands(px):
+def operand(px):
     str_px = bin(px)[2:] #Srez dlja izbavlenija ot 0b stroke
 ##    str_px = bin(0b11001)[2:]
     operand = []
@@ -18,12 +18,9 @@ def operands(px):
 ##    operand.reverse()
     return operand
     ##xor sdvig sdvig xor xor
-operands = operands(px)
-operands.append(operands.pop(0))
 
 def gx2(gx, px):
     return bin(gx) + "0"*px.bit_length()
-gx2 = gx2(gx,px)
 
 def algoritm(px,gx2):
     trigers = []
@@ -48,16 +45,13 @@ def algoritm(px,gx2):
     print "gx =",gx,"\noperands = ",operands, "\nR(x)=" , st
     return st
 
-##def zakodir_slovo():
-##    pass
+def zakodir_slovo(gx,px):
+    gx3 = gx2(gx,px)
+	operands = operand(px)
+	operands.append(operands.pop(0))
+	rx = algoritm(px,gx3)
+	print "F(x) =" ,bin(gx)[2:]+string.join(rx,"")
 
-rx = algoritm(px,gx2)
-##def print_rx(rx):
-##    i = 0
-##    str1 = ""
-##    while rx != []:
-##        str1.__add__(rx.pop(0))
-##    return str1
-##p_rx = print_rx(rx)
-##print p_rx
-print "F(x) =" ,bin(gx)[2:]+string.join(rx,"")
+zakodir_slovo(gx,px)
+
+
