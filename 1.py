@@ -1,3 +1,4 @@
+import string
 ##px = int(raw_input('vvedite px'),2) # int(a,2) = a in bin
 px = int('10011', 2)
 ##px = int(raw_input('vvedite A'),2) # int(a,2) = a in bin
@@ -28,11 +29,13 @@ def algoritm(px,gx2):
     trigers = []
     gx = list(gx2[2:])
     st = list(px.bit_length()* "0")
+    print "G(x)*x^k =",gx
+    print "P(x) =",bin(px)[2:]
     while gx != []:
         i = 0
         print st, " | ", gx
         head = gx.pop(0)
-        print st, " | ", gx
+##        print st, " | ", gx
         oppa = st + ["test"]
         oppa.pop(len(oppa)-1)
         while i < len(st) - 1:
@@ -42,8 +45,19 @@ def algoritm(px,gx2):
 ##            print st, " | "#, gx
         st[len(st) - 1] = str(int(oppa[0]).__xor__(int(head)))
     print st, " | ", gx
-    print "gx =",gx,"\noperands = ",operands, "\nst=" , st
-    print operands
-##    while bin(gx2):
+    print "gx =",gx,"\noperands = ",operands, "\nR(x)=" , st
+    return st
 
-algoritm(px,gx2)
+##def zakodir_slovo():
+##    pass
+
+rx = algoritm(px,gx2)
+##def print_rx(rx):
+##    i = 0
+##    str1 = ""
+##    while rx != []:
+##        str1.__add__(rx.pop(0))
+##    return str1
+##p_rx = print_rx(rx)
+##print p_rx
+print "F(x) =" ,bin(gx)[2:]+string.join(rx,"")
