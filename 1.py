@@ -18,6 +18,7 @@ def operands(px):
     return operand
     ##xor sdvig sdvig xor xor
 operands = operands(px)
+operands.append(operands.pop(0))
 
 def gx2(gx, px):
     return bin(gx) + "0"*px.bit_length()
@@ -30,12 +31,15 @@ def algoritm(px,gx2):
     while gx != []:
         i = 0
         head = gx.pop(0)
+
+        print st, "  ", gx
         while i < len(st) - 1:
             oppa = st
-            if operands[i] == 'fun_xor': st[i] = str(int(st[i]).__xor__(int(head)))
-            else: st[i] = str(head)
+            if operands[i] == 'fun_xor': st[i] = str(int(st[i]).__xor__(int(oppa[i+1])))
+            else: st[i] = str(oppa[i+1])
             i+=1
-            print st, "  ", gx
+        print st, "  ", gx
+        st[len(st) - 1] = str(int(oppa[0]).__xor__(int(head)))
     print "gx =",gx,"\noperands = ",operands, "\nst=" , st
     print operands
 ##    while bin(gx2):
