@@ -1,31 +1,37 @@
 # -*- coding: utf-8 -*-
 
-import string
 import gtk
+import string
+import random
 
-def on_calcbutton_pressed(calcbutton, arg1entry, arg2entry, sumlabel, icb):
+def on_calcbutton_pressed(calcbutton, arg1entry, arg2entry, sumlabel, fail_x_radio, fail_random_radio, fail_none_radio):
 ##    x1 = int(arg1entry.get_text())
 ##    x2 = int(arg2entry.get_text())
-    px = int(arg1entry.get_text(),2)
-    gx = int(arg2entry.get_text(),2)
-    summ = px + gx
-    if icb.get_active():
-      summ += 1
+    gx = int(arg1entry.get_text(),2)
+    px = int(arg2entry.get_text(),2)
+    fx = zakodir_slovo(gx,px)
+    if fail_x_radio.get_active():
+     x = 4
+    if fail_random_radio.get_active():
+      x = random.randrange(0,len(fx)-1)
+    if fail_none_radio.get_active():
+      x = None
+    d_f = dop_fail(fx,x=None)
+    print "fail in", x," =",d_f
+
+    decode_slovo(d_f,px)
+    summ = fx
+
     sumlabel.set_text(u"Сумма = " + unicode(summ))
 
 def main():
 	##px = int(raw_input('vvedite px'),2) # int(a,2) = a in bin
-    px = int('1011 ', 2)
+##    px = int('1011 ', 2)
     ##gx = int(raw_input('vvedite A'),2) # int(a,2) = a in bin
-    gx = int('1010010', 2)
-    fx = zakodir_slovo(gx,px)
-    x=None
-    d_f = dop_fail(fx,x)
-    print "fail in", x," =",d_f
+##    gx = int('1010010', 2)
 
-    decode_slovo(d_f,px)
     window = gtk.Window()
-    window.set_default_size(300,100)
+    window.set_default_size(600,600)
     window.set_title(u"MatCAD 100500")
 
     mainbox = gtk.VBox()
@@ -36,18 +42,25 @@ def main():
     arg2box = gtk.HBox()
     mainbox.pack_start(arg2box, expand=False)
 
-    arg1label = gtk.Label(u"Слагаемое 1:")
+    arg1label = gtk.Label(u"G(x) 1:")
     arg1box.pack_start(arg1label)
     arg1entry = gtk.Entry()
     arg1box.pack_start(arg1entry)
 
-    arg2label = gtk.Label(u"Слагаемое 2:")
+    arg2label = gtk.Label(u"P(x) 2:")
     arg2box.pack_start(arg2label)
     arg2entry = gtk.Entry()
     arg2box.pack_start(arg2entry)
+##
+##    inccheckbox = gtk.CheckButton(u"Добавить 1")
+##    mainbox.pack_start(inccheckbox)
 
-    inccheckbox = gtk.CheckButton(u"Добавить 1")
-    mainbox.pack_start(inccheckbox)
+
+    calcbutton = gtk.Button(u"Закодировать")
+    mainbox.pack_start(calcbutton, expand=False)
+
+    summlabel = gtk.Label(u"fx")
+    mainbox.pack_start(summlabel, expand=False)
 
     fail_x_radio = gtk.RadioButton(None, u"Ошик в разряде:")
     mainbox.pack_start(fail_x_radio)
@@ -58,14 +71,33 @@ def main():
     fail_none_radio = gtk.RadioButton(fail_random_radio, u"Нет ошибки")
     mainbox.pack_start(fail_none_radio)
 
-    calcbutton = gtk.Button(u"Посчитать")
-    mainbox.pack_start(calcbutton, expand=False)
+    summlabel2 = gtk.Label(u"Декодированное")
+    mainbox.pack_start(summlabel2, expand=False)
 
-    summlabel = gtk.Label(u"Тут будет сумма")
-    mainbox.pack_start(summlabel, expand=False)
+
+    calcbutton2 = gtk.Button(u"Декодировать")
+    mainbox.pack_start(calcbutton2, expand=False)
+
+    string = ("a"*100 + " " + "b"*150 + " " + "c"*100 + " ")*20
+
+    sw = gtk.ScrolledWindow()
+    sw.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+
+    textbuffer = gtk.TextBuffer()
+    textbuffer.set_text(string)
+
+    textview = gtk.TextView(textbuffer)
+    textview.set_wrap_mode(gtk.WRAP_WORD)
+    textview.set_editable(False)
+    sw.add(textview)
+
+    mainbox.pack_start(sw)
 
     window.connect("destroy", lambda _: gtk.main_quit())
-    calcbutton.connect("clicked", on_calcbutton_pressed, arg1entry, arg2entry, summlabel, inccheckbox)
+    calcbutton.connect("clicked", on_calcbutton_pressed, arg1entry, arg2entry, summlabel, fail_x_radio, fail_random_radio, fail_none_radio)
+
+    window.connect("destroy", lambda _: gtk.main_quit())
+    calcbutton2.connect("clicked", on_calcbutton_pressed, arg1entry, arg2entry, summlabel2, fail_x_radio, fail_random_radio, fail_none_radio)
 
     window.show_all()
     gtk.main()
