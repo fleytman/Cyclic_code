@@ -14,10 +14,10 @@ import gtk
 ##    sumlabel.set_text(u"Сумма = " + unicode(summ))
 
 def main():
-    ##px = int(raw_input('vvedite px'),2) # int(a,2) = a in bin
-    px = int('10011', 2)
+	##px = int(raw_input('vvedite px'),2) # int(a,2) = a in bin
+    px = int('1011 ', 2)
     ##gx = int(raw_input('vvedite A'),2) # int(a,2) = a in bin
-    gx = int('101101101', 2)
+    gx = int('1010010', 2)
     fx = zakodir_slovo(gx,px)
     x=None
     d_f = dop_fail(fx,x)
