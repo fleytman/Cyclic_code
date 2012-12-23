@@ -2,16 +2,16 @@
 
 import string
 import gtk
-##
-##def on_calcbutton_pressed(calcbutton, arg1entry, arg2entry, sumlabel, icb):
-####    x1 = int(arg1entry.get_text())
-####    x2 = int(arg2entry.get_text())
-##    px = int(arg1entry.get_text(),2)
-##    gx = int(arg2entry.get_text(),2)
-##    summ = px + gx
-##    if icb.get_active():
-##      summ += 1
-##    sumlabel.set_text(u"Сумма = " + unicode(summ))
+
+def on_calcbutton_pressed(calcbutton, arg1entry, arg2entry, sumlabel, icb):
+##    x1 = int(arg1entry.get_text())
+##    x2 = int(arg2entry.get_text())
+    px = int(arg1entry.get_text(),2)
+    gx = int(arg2entry.get_text(),2)
+    summ = px + gx
+    if icb.get_active():
+      summ += 1
+    sumlabel.set_text(u"Сумма = " + unicode(summ))
 
 def main():
 	##px = int(raw_input('vvedite px'),2) # int(a,2) = a in bin
@@ -24,51 +24,51 @@ def main():
     print "fail in", x," =",d_f
 
     decode_slovo(d_f,px)
-##    window = gtk.Window()
-##    window.set_default_size(300,100)
-##    window.set_title(u"MatCAD 100500")
-##
-##    mainbox = gtk.VBox()
-##    window.add(mainbox)
-##
-##    arg1box = gtk.HBox()
-##    mainbox.pack_start(arg1box, expand=False)
-##    arg2box = gtk.HBox()
-##    mainbox.pack_start(arg2box, expand=False)
-##
-##    arg1label = gtk.Label(u"Слагаемое 1:")
-##    arg1box.pack_start(arg1label)
-##    arg1entry = gtk.Entry()
-##    arg1box.pack_start(arg1entry)
-##
-##    arg2label = gtk.Label(u"Слагаемое 2:")
-##    arg2box.pack_start(arg2label)
-##    arg2entry = gtk.Entry()
-##    arg2box.pack_start(arg2entry)
-##
-##    inccheckbox = gtk.CheckButton(u"Добавить 1")
-##    mainbox.pack_start(inccheckbox)
-##
-##    fail_x_radio = gtk.RadioButton(None, u"Ошик в разряде:")
-##    mainbox.pack_start(fail_x_radio)
-##
-##    fail_random_radio = gtk.RadioButton(fail_x_radio, u"Случайная ошибка")
-##    mainbox.pack_start(fail_random_radio)
-##
-##    fail_none_radio = gtk.RadioButton(fail_random_radio, u"Нет ошибки")
-##    mainbox.pack_start(fail_none_radio)
-##
-##    calcbutton = gtk.Button(u"Посчитать")
-##    mainbox.pack_start(calcbutton, expand=False)
-##
-##    summlabel = gtk.Label(u"Тут будет сумма")
-##    mainbox.pack_start(summlabel, expand=False)
-##
-##    window.connect("destroy", lambda _: gtk.main_quit())
-##    calcbutton.connect("clicked", on_calcbutton_pressed, arg1entry, arg2entry, summlabel, inccheckbox)
-##
-##    window.show_all()
-##    gtk.main()
+    window = gtk.Window()
+    window.set_default_size(300,100)
+    window.set_title(u"MatCAD 100500")
+
+    mainbox = gtk.VBox()
+    window.add(mainbox)
+
+    arg1box = gtk.HBox()
+    mainbox.pack_start(arg1box, expand=False)
+    arg2box = gtk.HBox()
+    mainbox.pack_start(arg2box, expand=False)
+
+    arg1label = gtk.Label(u"Слагаемое 1:")
+    arg1box.pack_start(arg1label)
+    arg1entry = gtk.Entry()
+    arg1box.pack_start(arg1entry)
+
+    arg2label = gtk.Label(u"Слагаемое 2:")
+    arg2box.pack_start(arg2label)
+    arg2entry = gtk.Entry()
+    arg2box.pack_start(arg2entry)
+
+    inccheckbox = gtk.CheckButton(u"Добавить 1")
+    mainbox.pack_start(inccheckbox)
+
+    fail_x_radio = gtk.RadioButton(None, u"Ошик в разряде:")
+    mainbox.pack_start(fail_x_radio)
+
+    fail_random_radio = gtk.RadioButton(fail_x_radio, u"Случайная ошибка")
+    mainbox.pack_start(fail_random_radio)
+
+    fail_none_radio = gtk.RadioButton(fail_random_radio, u"Нет ошибки")
+    mainbox.pack_start(fail_none_radio)
+
+    calcbutton = gtk.Button(u"Посчитать")
+    mainbox.pack_start(calcbutton, expand=False)
+
+    summlabel = gtk.Label(u"Тут будет сумма")
+    mainbox.pack_start(summlabel, expand=False)
+
+    window.connect("destroy", lambda _: gtk.main_quit())
+    calcbutton.connect("clicked", on_calcbutton_pressed, arg1entry, arg2entry, summlabel, inccheckbox)
+
+    window.show_all()
+    gtk.main()
 
 def operand(px):
     str_px = bin(px)[2:] #Srez dlja izbavlenija ot 0b stroke
@@ -139,7 +139,6 @@ def decode_slovo(d_f,px):
 ##    operands.append(operands.pop(0))
     operands.pop(0)
     rx = algoritm(px,d_f,operands)
-    print rx
 
 if __name__ == "__main__":
 	main()
