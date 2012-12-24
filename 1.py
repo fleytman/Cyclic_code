@@ -4,25 +4,32 @@ import gtk
 import string
 import random
 
-def on_calcbutton_pressed(calcbutton, arg1entry, arg2entry, sumlabel, fail_x_radio, fail_random_radio, fail_none_radio):
+def on_calcbutton_pressed(calcbutton, arg1entry, arg2entry, sumlabel):
 ##    x1 = int(arg1entry.get_text())
 ##    x2 = int(arg2entry.get_text())
     gx = int(arg1entry.get_text(),2)
     px = int(arg2entry.get_text(),2)
+##    Надо добавить проверку px на соответствие к gx
     fx = zakodir_slovo(gx,px)
+    summ = fx
+    sumlabel.set_text(u"Сумма = " + unicode(summ))
+
+
+def on_decode_pressed(calcbutton, sumlabel, sunlabel2, fail_x_radio, fail_random_radio, fail_none_radio):
     if fail_x_radio.get_active():
      x = 4
     if fail_random_radio.get_active():
       x = random.randrange(0,len(fx)-1)
     if fail_none_radio.get_active():
       x = None
+    fx = sumlabel
     d_f = dop_fail(fx,x=None)
     print "fail in", x," =",d_f
+    sumlabel2.set_text(u"Сумма = " + unicode(summ))
 
     decode_slovo(d_f,px)
-    summ = fx
 
-    sumlabel.set_text(u"Сумма = " + unicode(summ))
+
 
 def main():
 	##px = int(raw_input('vvedite px'),2) # int(a,2) = a in bin
@@ -32,7 +39,7 @@ def main():
 
     window = gtk.Window()
     window.set_default_size(600,600)
-    window.set_title(u"MatCAD 100500")
+    window.set_title(u"Кодирование циклическим кодом и декодирование с обнаружением ошибки")
 
     mainbox = gtk.VBox()
     window.add(mainbox)
@@ -94,10 +101,10 @@ def main():
     mainbox.pack_start(sw)
 
     window.connect("destroy", lambda _: gtk.main_quit())
-    calcbutton.connect("clicked", on_calcbutton_pressed, arg1entry, arg2entry, summlabel, fail_x_radio, fail_random_radio, fail_none_radio)
+    calcbutton.connect("clicked", on_calcbutton_pressed, arg1entry, arg2entry, summlabel)
 
     window.connect("destroy", lambda _: gtk.main_quit())
-    calcbutton2.connect("clicked", on_calcbutton_pressed, arg1entry, arg2entry, summlabel2, fail_x_radio, fail_random_radio, fail_none_radio)
+    calcbutton2.connect("clicked", on_decode_pressed, summlabel, summlabel2, fail_x_radio, fail_random_radio, fail_none_radio)
 
     window.show_all()
     gtk.main()
@@ -174,3 +181,6 @@ def decode_slovo(d_f,px):
 
 if __name__ == "__main__":
 	main()
+
+
+##Добавить комментарии есть ошибка или нет (c) Гоманилова
