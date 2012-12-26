@@ -3,6 +3,7 @@
 import gtk
 import string
 import random
+import math
 
 def on_calcbutton_pressed(calcbutton, arg1entry, arg2entry, sumlabel):
 ##    x1 = int(arg1entry.get_text())
