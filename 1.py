@@ -9,6 +9,7 @@ def on_calcbutton_pressed(calcbutton, arg1entry, arg2entry, sumlabel):
 ##    x2 = int(arg2entry.get_text())
     gx = int(arg1entry.get_text(),2)
     px = int(arg2entry.get_text(),2)
+
 ##    Надо добавить проверку px на соответствие к gx
     fx = zakodir_slovo(gx,px)
     summ = fx
@@ -53,19 +54,19 @@ def main():
     mainbox = gtk.VBox()
     window.add(mainbox)
 
-    arg1box = gtk.HBox()
+    arg1box = gtk.VBox()
     mainbox.pack_start(arg1box, expand=False)
-    arg2box = gtk.HBox()
+    arg2box = gtk.VBox()
     mainbox.pack_start(arg2box, expand=False)
 
 
 
-    arg1label = gtk.Label(u"G(x) 1:")
+    arg1label = gtk.Label(u"G(x):")
     arg1box.pack_start(arg1label)
     arg1entry = gtk.Entry()
     arg1box.pack_start(arg1entry)
 
-    arg2label = gtk.Label(u"P(x) 2:")
+    arg2label = gtk.Label(u"P(x):")
     arg2box.pack_start(arg2label)
     arg2entry = gtk.Entry()
     arg2box.pack_start(arg2entry)
@@ -80,10 +81,14 @@ def main():
     summlabel = gtk.Label(u"fx")
     mainbox.pack_start(summlabel, expand=False)
 
+
+    d_flabel = gtk.Label(u"d_f")
+    mainbox.pack_start(d_flabel)
+
     fail_x_radio = gtk.RadioButton(None, u"Ошибка в разряде:")
     mainbox.pack_start(fail_x_radio)
 
-    failbox = gtk.HBox()
+    failbox = gtk.VBox()
     mainbox.pack_start(failbox, expand=False)
 
     failentry = gtk.Entry()
