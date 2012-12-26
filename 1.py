@@ -19,8 +19,8 @@ def on_calcbutton_pressed(calcbutton, arg1entry, arg2entry, sumlabel):
     sumlabel.set_text(u"Сумма = " + unicode(summ))
 
 
-def on_decode_pressed(calcbutton,arg2entry, sumlabel, summlabel2, fail_x_radio, fail_random_radio, fail_none_radio, failentry):
-    px = int(arg2entry.get_text(),2)
+def on_decode_pressed(calcbutton,arg2entry, sumlabel, summlabel2, fail_x_radio, fail_random_radio, fail_none_radio, failentry, d_flabel):
+    px = int(arg2entry.get_text(), 2)
     if fail_x_radio.get_active():
         print failentry
         x = int(failentry.get_text())
@@ -85,21 +85,19 @@ def main():
     d_flabel = gtk.Label(u"d_f")
     mainbox.pack_start(d_flabel)
 
-    fail_x_radio = gtk.RadioButton(None, u"Ошибка в разряде:")
+
+    fail_random_radio = gtk.RadioButton(None, u"Случайная ошибка")
+    mainbox.pack_start(fail_random_radio)
+
+    fail_x_radio = gtk.RadioButton(fail_random_radio, u"Ошибка в x разряде:")
     mainbox.pack_start(fail_x_radio)
 
     failbox = gtk.VBox()
     mainbox.pack_start(failbox, expand=False)
-
     failentry = gtk.Entry()
     failbox.pack_start(failentry)
 
-    fail_random_radio = gtk.RadioButton(fail_x_radio, u"Случайная ошибка")
-    mainbox.pack_start(fail_random_radio)
-
-
-
-    fail_none_radio = gtk.RadioButton(fail_random_radio, u"Нет ошибки")
+    fail_none_radio = gtk.RadioButton(fail_x_radio, u"Нет ошибки")
     mainbox.pack_start(fail_none_radio)
 
     summlabel2 = gtk.Label(u"Декодированное")
@@ -128,7 +126,7 @@ def main():
 
 
     window.connect("destroy", lambda _: gtk.main_quit())
-    calcbutton2.connect("clicked", on_decode_pressed,arg2entry, summlabel, summlabel2, fail_x_radio, fail_random_radio, fail_none_radio, failentry)
+    calcbutton2.connect("clicked", on_decode_pressed,arg2entry, summlabel, summlabel2, fail_x_radio, fail_random_radio, fail_none_radio, failentry,d_flabel)
 
     window.show_all()
     gtk.main()
@@ -177,6 +175,19 @@ def algoritm(px,gx3,operands):
     return st
 
 def zakodir_slovo(gx,px):
+##    k >= log(m+k+1,2)
+    m = gx.bit_length()
+    k = 0
+    while math.log(m+k+1) > k:
+        k+=1
+    k+=1
+    if px.bit_length() < k:
+        print u"Данное действие некорректно, так как наивысшая степень P(x)=", px.bit_length(), u"меньше k =", k
+        return u"Данное действие некорректно, так как наивысшая степень P(x)="+ unicode(px.bit_length()) + u"меньше k =" + unicode(k)
+    if px.bit_length() > k:
+        print u"Данное действие нерационально, так как наивысшая степень P(x)=", px.bit_length(), u",больше k =", k
+        return u"Данное действие нерационально, так как наивысшая степень P(x)="+ unicode(px.bit_length()) + u"больше k =" + unicode(k)
+
     gx3 = gx2(gx,px)
     operands = operand(px)
 ##    operands.append(operands.pop(0))
@@ -198,7 +209,6 @@ def dop_fail(fx, x = None):
 
 def decode_slovo(d_f,px):
     operands = operand(px)
-##    operands.append(operands.pop(0))
     operands.pop(0)
     rx = algoritm(px,d_f,operands)
 
@@ -206,6 +216,3 @@ def decode_slovo(d_f,px):
 
 if __name__ == "__main__":
 	main()
-
-
-##Добавить комментарии есть ошибка или нет (c) Гоманилова
