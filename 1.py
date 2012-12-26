@@ -12,24 +12,33 @@ def on_calcbutton_pressed(calcbutton, arg1entry, arg2entry, sumlabel):
 ##    Надо добавить проверку px на соответствие к gx
     fx = zakodir_slovo(gx,px)
     summ = fx
+##    global qaz
+    global qaze
+    qaze = fx
     sumlabel.set_text(u"Сумма = " + unicode(summ))
 
 
-def on_decode_pressed(calcbutton, sumlabel, sunlabel2, fail_x_radio, fail_random_radio, fail_none_radio):
+def on_decode_pressed(calcbutton,arg2entry, sumlabel, summlabel2, fail_x_radio, fail_random_radio, fail_none_radio, failentry):
+    px = int(arg2entry.get_text(),2)
     if fail_x_radio.get_active():
-     x = 4
+        print failentry
+        x = int(failentry.get_text())
     if fail_random_radio.get_active():
-      x = random.randrange(0,len(fx)-1)
+        x = random.randrange(0,len(qaze)-1)
     if fail_none_radio.get_active():
-      x = None
-    fx = sumlabel
-    d_f = dop_fail(fx,x=None)
+        x = None
+    d_f = dop_fail(qaze,x)
+##    print "fail in", x," =",d_f
+##    fx = decode_slovo(d_f,px)
+
     print "fail in", x," =",d_f
-    sumlabel2.set_text(u"Сумма = " + unicode(summ))
+    rx = decode_slovo(d_f,px)
+    rx1 = int(string.join(rx,""))
+    if rx1  == 0: rx_text = u"нет"
+    else: rx_text = u"есть"
+    summlabel2.set_text(u"Сумма = " + unicode(rx) + u"следовательно ошибка " + rx_text)
 
-    decode_slovo(d_f,px)
-
-
+##    summlabel2.set_text(u"Сумма = " + unicode(fx))
 
 def main():
 	##px = int(raw_input('vvedite px'),2) # int(a,2) = a in bin
@@ -38,7 +47,7 @@ def main():
 ##    gx = int('1010010', 2)
 
     window = gtk.Window()
-    window.set_default_size(600,600)
+    window.set_default_size(600,400)
     window.set_title(u"Кодирование циклическим кодом и декодирование с обнаружением ошибки")
 
     mainbox = gtk.VBox()
@@ -48,6 +57,8 @@ def main():
     mainbox.pack_start(arg1box, expand=False)
     arg2box = gtk.HBox()
     mainbox.pack_start(arg2box, expand=False)
+
+
 
     arg1label = gtk.Label(u"G(x) 1:")
     arg1box.pack_start(arg1label)
@@ -69,11 +80,19 @@ def main():
     summlabel = gtk.Label(u"fx")
     mainbox.pack_start(summlabel, expand=False)
 
-    fail_x_radio = gtk.RadioButton(None, u"Ошик в разряде:")
+    fail_x_radio = gtk.RadioButton(None, u"Ошибка в разряде:")
     mainbox.pack_start(fail_x_radio)
+
+    failbox = gtk.HBox()
+    mainbox.pack_start(failbox, expand=False)
+
+    failentry = gtk.Entry()
+    failbox.pack_start(failentry)
 
     fail_random_radio = gtk.RadioButton(fail_x_radio, u"Случайная ошибка")
     mainbox.pack_start(fail_random_radio)
+
+
 
     fail_none_radio = gtk.RadioButton(fail_random_radio, u"Нет ошибки")
     mainbox.pack_start(fail_none_radio)
@@ -81,30 +100,30 @@ def main():
     summlabel2 = gtk.Label(u"Декодированное")
     mainbox.pack_start(summlabel2, expand=False)
 
-
     calcbutton2 = gtk.Button(u"Декодировать")
     mainbox.pack_start(calcbutton2, expand=False)
 
-    string = ("a"*100 + " " + "b"*150 + " " + "c"*100 + " ")*20
+##    string = ("a"*100 + " " + "b"*150 + " " + "c"*100 + " ")*20
 
     sw = gtk.ScrolledWindow()
     sw.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+##
+##    textbuffer = gtk.TextBuffer()
+##    textbuffer.set_text(string)
 
-    textbuffer = gtk.TextBuffer()
-    textbuffer.set_text(string)
+##    textview = gtk.TextView(textbuffer)
+##    textview.set_wrap_mode(gtk.WRAP_WORD)
+##    textview.set_editable(False)
+##    sw.add(textview)
 
-    textview = gtk.TextView(textbuffer)
-    textview.set_wrap_mode(gtk.WRAP_WORD)
-    textview.set_editable(False)
-    sw.add(textview)
-
-    mainbox.pack_start(sw)
+##    mainbox.pack_start(sw)
 
     window.connect("destroy", lambda _: gtk.main_quit())
     calcbutton.connect("clicked", on_calcbutton_pressed, arg1entry, arg2entry, summlabel)
 
+
     window.connect("destroy", lambda _: gtk.main_quit())
-    calcbutton2.connect("clicked", on_decode_pressed, summlabel, summlabel2, fail_x_radio, fail_random_radio, fail_none_radio)
+    calcbutton2.connect("clicked", on_decode_pressed,arg2entry, summlabel, summlabel2, fail_x_radio, fail_random_radio, fail_none_radio, failentry)
 
     window.show_all()
     gtk.main()
@@ -171,13 +190,14 @@ def dop_fail(fx, x = None):
     elif fx[-x] == "1":
         fx[-x] = "0"
         return string.join(fx,"")
-    print fx
 
 def decode_slovo(d_f,px):
     operands = operand(px)
 ##    operands.append(operands.pop(0))
     operands.pop(0)
     rx = algoritm(px,d_f,operands)
+
+    return rx
 
 if __name__ == "__main__":
 	main()
