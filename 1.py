@@ -179,9 +179,8 @@ def zakodir_slovo(gx,px):
 ##    k >= log(m+k+1,2)
     m = gx.bit_length()
     k = 0
-    while math.log(m+k+1) > k:
+    while math.log(m+k+1,2) > k:
         k+=1
-    k+=1
     if px.bit_length() < k:
         print u"Данное действие некорректно, так как наивысшая степень P(x)=", px.bit_length(), u"меньше k =", k
         return u"Данное действие некорректно, так как наивысшая степень P(x)="+ unicode(px.bit_length()) + u"меньше k =" + unicode(k)
