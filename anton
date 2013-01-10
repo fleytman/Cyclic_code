@@ -1,0 +1,195 @@
+# -*- coding: utf-8 -*-
+import random
+import math
+import string
+import gtk
+
+def on_calcbutton_pressed(calcbutton, g_x_entry, p_x_entry, summlabel):
+  g_x_inp =g_x_entry.get_text()
+	p_x_inp =p_x_entry.get_text()
+
+	g_x=trans(g_x_inp)
+	#print 'inform chast` transform: ',g_x
+	p_x=trans(p_x_inp)
+	#print 'porojd polinom transform: ',p_x
+	f_x_0=umnoj(g_x,p_x[0])
+	#print 'inform chast` umnoj: ',f_x_0
+	f_x=list(f_x_0)
+	#print 'sozdana kopia umnoj inf chasti: ',f_x
+	f_x.extend(delenie(f_x_0,p_x))
+	#print 'poluchen kod: ',f_x
+	i=0
+	f_x_chisl=0
+	while i<len(f_x):
+		f_x_chisl+=10**f_x[i]
+		i+=1
+	#print 'Kod:'
+	#print f_x_chisl
+
+	summ = f_x_chisl
+	summlabel.set_text(u"Кодовая комбинация = " + unicode(summ))
+
+def on_decode_pressed(calcbutton, summlabel, summlabel2, summlabel3, summlabel4, fail_random_radio, fail_none_radio, p_x_entry):
+	fail=0
+	g_x_0 = summlabel.get_text()
+	g_x=g_x_0[38:]
+	g_x_list=list(g_x)
+
+
+	if fail_random_radio.get_active():
+		change=0
+		x = random.randrange(0,len(g_x)-1)
+
+		if int(g_x_list[x])==0:
+			g_x_list[x]=1
+			change=1
+
+		if int(g_x_list[x])==1 and change==0:
+			g_x_list=0
+
+		g_x=v_stroku(g_x_list)
+
+		summlabel4.set_text(u"Ошибка в = " + unicode(len(g_x)-x+1) + u" младшем разряде")
+
+	if fail_none_radio.get_active():
+		summlabel4.set_text("")
+
+	g_x=trans(g_x)
+	p_x=trans(p_x_entry.get_text())
+
+	f_x_0=umnoj(g_x,p_x[0])
+	r_x=delenie(f_x_0,p_x)
+
+	i=0
+	r_x_out=0
+	while i<len(r_x):
+		r_x_out+=10**r_x[i]
+		i+=1
+
+	summlabel3.set_text(u"Остаток = " + unicode(r_x_out))
+
+	if r_x<>[]:
+		fail=1
+
+
+	if fail==0:
+		summlabel2.set_text(u"Ошибок нет")
+
+	if fail==1:
+		summlabel2.set_text(u"Найдена ошибка")
+
+def v_stroku(g_x_list):
+	i=0
+	g_x=[]
+	while i<len(g_x_list)-1:
+		g_x+=str(g_x_list[i])
+		i+=1
+	return(g_x)
+
+def delenie(n_x,p_x): #функция деления
+	chastnoe=[] #создаем пустое частное
+	end=0
+	while end<>1:
+		if n_x[0]>=p_x[0]: #возможно деление?
+			chastnoe_kus=n_x[0]-p_x[0] #находим часть частного
+			chastnoe.append(chastnoe_kus) #добавляем в частное
+			i=0
+			while i<len(p_x): # выбираем что будем искать в информационной части
+				d=0
+				nahod=0
+				while d<len(n_x):# ищем в информационной части
+					if n_x[d]==(p_x[i]+chastnoe_kus): # если находим
+						n_x.pop(d)
+						nahod=1
+						if len(n_x)==0:
+							end=1
+					d+=1
+				if nahod==0: #если не находим
+					n_x.append(p_x[i]+chastnoe_kus)
+				i+=1
+			chastnoe.sort(reverse=True)
+			n_x.sort(reverse=True)
+			if n_x<>[]:
+				if n_x[0]<p_x[0]:
+					end=1
+	#print 'ostatok: ',n_x,'chastnoe: ',chastnoe
+	return n_x
+
+def trans(inp):
+	i=0
+	out=[]
+#перевод строчки в массив, для удобства работы с ним
+	while i<len(inp):#пока длинна числа больше 0
+		if int(inp[i])==1:
+			out.append(len(inp)-(i+1))
+		i+=1
+	return out
+
+def umnoj(n_x,p_x_first):
+	i=0
+	while i<len(n_x):
+		n_x[i]=n_x[i]+p_x_first
+		i+=1
+	return(n_x)
+
+
+
+
+def main():
+	window = gtk.Window()
+	window.set_default_size(600,400)
+	window.set_title(u"Циклический код")
+
+	mainbox = gtk.VBox()
+	window.add(mainbox)
+
+	g_x_box = gtk.HBox()
+	mainbox.pack_start(g_x_box, expand=False)
+	p_x_box = gtk.HBox()
+	mainbox.pack_start(p_x_box, expand=False)
+
+	g_x_label = gtk.Label(u"G(x) 1:")
+	g_x_box.pack_start(g_x_label)
+	g_x_entry = gtk.Entry()
+	g_x_box.pack_start(g_x_entry)
+
+	p_x_label = gtk.Label(u"P(x) 1:")
+	p_x_box.pack_start(p_x_label)
+	p_x_entry = gtk.Entry()
+	p_x_box.pack_start(p_x_entry)
+
+	calcbutton = gtk.Button(u"Закодировать")
+	mainbox.pack_start(calcbutton, expand=False)
+
+	summlabel = gtk.Label()
+	mainbox.pack_start(summlabel, expand=False)
+
+	fail_random_radio = gtk.RadioButton(None, u"Случайная ошибка")
+	mainbox.pack_start(fail_random_radio)
+
+	fail_none_radio = gtk.RadioButton(fail_random_radio, u"Нет ошибки")
+	mainbox.pack_start(fail_none_radio)
+
+	summlabel2 = gtk.Label()
+	mainbox.pack_start(summlabel2, expand=False)
+
+	summlabel4 = gtk.Label()
+	mainbox.pack_start(summlabel4, expand=False)
+
+	summlabel3 = gtk.Label()
+	mainbox.pack_start(summlabel3, expand=False)
+
+	calcbutton2 = gtk.Button(u"Декодировать")
+	mainbox.pack_start(calcbutton2, expand=False)
+
+	window.connect("destroy", lambda _: gtk.main_quit())
+	calcbutton.connect("clicked", on_calcbutton_pressed, g_x_entry, p_x_entry, summlabel)
+	calcbutton2.connect("clicked", on_decode_pressed, summlabel, summlabel2, summlabel3, summlabel4, fail_random_radio, fail_none_radio, p_x_entry)
+
+
+	window.show_all()
+	gtk.main()
+
+
+if __name__ == "__main__":
+	main()
