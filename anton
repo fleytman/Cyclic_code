@@ -5,7 +5,7 @@ import string
 import gtk
 
 def on_calcbutton_pressed(calcbutton, g_x_entry, p_x_entry, summlabel):
-  g_x_inp =g_x_entry.get_text()
+	g_x_inp =g_x_entry.get_text()
 	p_x_inp =p_x_entry.get_text()
 
 	g_x=trans(g_x_inp)
@@ -41,11 +41,11 @@ def on_decode_pressed(calcbutton, summlabel, summlabel2, summlabel3, summlabel4,
 		x = random.randrange(0,len(g_x)-1)
 
 		if int(g_x_list[x])==0:
-			g_x_list[x]=1
+			g_x_list[x]='1'
 			change=1
 
 		if int(g_x_list[x])==1 and change==0:
-			g_x_list=0
+			g_x_list='0'
 
 		g_x=v_stroku(g_x_list)
 
@@ -89,7 +89,7 @@ def v_stroku(g_x_list):
 def delenie(n_x,p_x): #функция деления
 	chastnoe=[] #создаем пустое частное
 	end=0
-	while end<>1:
+	while end!=0:
 		if n_x[0]>=p_x[0]: #возможно деление?
 			chastnoe_kus=n_x[0]-p_x[0] #находим часть частного
 			chastnoe.append(chastnoe_kus) #добавляем в частное
