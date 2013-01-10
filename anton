@@ -95,7 +95,9 @@ def v_stroku(g_x_list):
 	return(g_x)
 
 def delenie(n_x,p_x): #функция деления
+	print 'Nachinaem delenie'
 	chastnoe=[] #создаем пустое частное
+	print 'delimoe =',n_x, 'chastnoe = ',chastnoe
 	end=0
 	while end<>1:
 		if n_x[0]>=p_x[0]: #возможно деление?
@@ -117,6 +119,7 @@ def delenie(n_x,p_x): #функция деления
 				i+=1
 			chastnoe.sort(reverse=True)
 			n_x.sort(reverse=True)
+			print 'delimoe =',n_x, 'chastnoe = ',chastnoe
 			if n_x<>[]:
 				if n_x[0]<p_x[0]:
 					end=1
