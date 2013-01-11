@@ -32,32 +32,29 @@ def on_calcbutton_pressed(calcbutton, g_x_entry, p_x_entry, summlabel):
 def on_decode_pressed(calcbutton, summlabel, summlabel2, summlabel3, summlabel4, fail_set_radio, fail_none_radio, p_x_entry, fail_entry):
 	fail=0
 	g_x_0 = summlabel.get_text()
-	print u'g_x_0',g_x_0
 	g_x=g_x_0[38:]
-	print u'g_x',g_x
 	g_x_list=list(g_x)
-	print u'g_x_list',g_x_list
-
 
 	if fail_set_radio.get_active():
 		change=0
 		x=int(fail_entry.get_text())
-
-		if int(g_x_list[x])==0:
-			print 'g_x_list[x]',g_x_list[x]
-			print 'g_x_list',g_x_list
-			g_x_list[x]=1
-			print 'g_x_list',g_x_list
+		print 'x =',x
+		print 'g_x_list =',g_x_list
+		if int(g_x_list[-x])==0:
+			g_x_list[-x]='1'
+##			g_x_list[-x]=1
+			print 'g_x_list =',g_x_list
 			change=1
 
-		if int(g_x_list[x])==1 and change==0:
-			g_x_list[x]=0
-			print 'g_x_list',g_x_list
+		if int(g_x_list[-x])==1 and change==0:
+			g_x_list[-x]='0'
+##			g_x_list[-x]=0
+			print 'g_x_list =',g_x_list
 
-		print "g_x_list =",g_x_list
+
 		g_x=v_stroku(g_x_list)
 
-		summlabel4.set_text(u"Ошибка в = " + unicode(len(g_x)-x+1) + u" младшем разряде")
+		summlabel4.set_text(u"Ошибка в = " + unicode(x) + u" младшем разряде")
 
 	if fail_none_radio.get_active():
 		summlabel4.set_text("")
