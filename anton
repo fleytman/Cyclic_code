@@ -4,7 +4,7 @@ import math
 import string
 import gtk
 
-def on_calcbutton_pressed(calcbutton, g_x_entry, p_x_entry, summlabel):
+def on_calcbutton_pressed(calcbutton, g_x_entry, p_x_entry, summlabel,reshlabel1, gxlabel,pxlabel):
 	can=1
 	g_x_inp =g_x_entry.get_text()
 	p_x_inp =p_x_entry.get_text()
@@ -19,10 +19,12 @@ def on_calcbutton_pressed(calcbutton, g_x_entry, p_x_entry, summlabel):
 	f_x=list(f_x_0)
 
 	if can==1:
-		#print 'sozdana kopia umnoj inf chasti: ',f_x
-		f_x.extend(delenie(f_x_0,p_x))
+		gxlabel.set_text(u"Степени x'ов в G(x) = "+unicode(f_x))
+		pxlabel.set_text(u"Степени x'ов в P(x) = "+unicode(p_x))
+		print 'sozdana kopia umnoj inf chasti: ',f_x
+		f_x.extend(delenie(f_x_0,p_x,reshlabel1))
 
-		#print 'poluchen kod: ',f_x
+		print 'poluchen kod: ',f_x
 		i=0
 		f_x_chisl=0
 		while i<len(f_x):
@@ -38,7 +40,7 @@ def on_calcbutton_pressed(calcbutton, g_x_entry, p_x_entry, summlabel):
 	if can==0:
 		summlabel.set_text(u"Данное действие некорректно, так как наивысшая степень P(x) меньше k")
 
-def on_decode_pressed(calcbutton, summlabel, summlabel2, summlabel3, summlabel4, summlabel5, fail_set_radio, fail_none_radio, p_x_entry, fail_entry):
+def on_decode_pressed(calcbutton, summlabel, summlabel2, summlabel3, summlabel4, summlabel5, fail_set_radio, fail_none_radio, p_x_entry, fail_entry,reshlabel2):
 	fail=0
 	g_x_0 = summlabel.get_text()
 	g_x=g_x_0[38:]
@@ -71,7 +73,7 @@ def on_decode_pressed(calcbutton, summlabel, summlabel2, summlabel3, summlabel4,
 	print g_x
 	p_x=trans(p_x_entry.get_text())
 
-	r_x=delenie(g_x,p_x)
+	r_x=delenie(g_x,p_x,reshlabel2)
 
 	i=0
 	r_x_out=0
@@ -100,10 +102,12 @@ def v_stroku(g_x_list):
 		i+=1
 	return(g_x)
 
-def delenie(n_x,p_x): #функция деления
-	print 'Nachinaem delenie'
+def delenie(n_x,p_x,reshlabel): #функция деления
+	print u'Начинаем деление'
+	resh = u'Начинаем деление\n'
 	chastnoe=[] #создаем пустое частное
 	print 'delimoe =',n_x, 'chastnoe = ',chastnoe
+	resh+= u'делимое =' + str(n_x) + u'частное = ' + str(chastnoe) + "\n"
 	end=0
 	while end<>1:
 		if n_x[0]>=p_x[0]: #возможно деление?
@@ -124,12 +128,15 @@ def delenie(n_x,p_x): #функция деления
 			chastnoe.sort(reverse=True)
 			n_x.sort(reverse=True)
 			print 'delimoe =',n_x, 'chastnoe = ',chastnoe
+			resh+= u'делимое =' + str(n_x) + u'частное = ' + str(chastnoe) + "\n"
 			if n_x==[]:
 				end=1
 			if n_x<>[]:
 				if n_x[0]<p_x[0]:
 					end=1
 	print 'ostatok: ',n_x,'chastnoe: ',chastnoe, 'delitel` :', p_x
+	resh+= u"остаток" + str(n_x) + u'частное: ' + str(chastnoe)
+	reshlabel.set_text(resh)
 	return n_x
 
 def trans(inp):
@@ -140,7 +147,7 @@ def trans(inp):
 		if int(inp[i])==1:
 			out.append(len(inp)-(i+1))
 		i+=1
-	print "out = ",out
+##	print "out = ",out
 	return out
 
 def umnoj(n_x,p_x_first):
@@ -192,9 +199,17 @@ def main():
 	p_x_entry = gtk.Entry()
 	p_x_box.pack_start(p_x_entry)
 
-
 	calcbutton = gtk.Button(u"Закодировать")
 	mainbox.pack_start(calcbutton, expand=False)
+
+	gxlabel = gtk.Label(u"Степени x'ов в G(x)")
+	mainbox.pack_start(gxlabel, expand=False)
+
+	pxlabel = gtk.Label(u"Степени x'ов в P(x)")
+	mainbox.pack_start(pxlabel, expand=False)
+
+	reshlabel1 = gtk.Label(u"Тут будет ход решение")
+	mainbox.pack_start(reshlabel1, expand=False)
 
 	summlabel = gtk.Label("Кодовая комбинация =")
 	mainbox.pack_start(summlabel, expand=False)
@@ -221,7 +236,8 @@ def main():
 	fail_none_radio = gtk.RadioButton(fail_set_radio, u"Нет ошибки")
 	mainbox.pack_start(fail_none_radio)
 
-
+	reshlabel2 = gtk.Label(u"Тут будет ход решение")
+	mainbox.pack_start(reshlabel2, expand=False)
 
 	calcbutton2 = gtk.Button(u"Декодировать")
 	mainbox.pack_start(calcbutton2, expand=False)
@@ -237,8 +253,8 @@ def main():
 
 
 	window.connect("destroy", lambda _: gtk.main_quit())
-	calcbutton.connect("clicked", on_calcbutton_pressed, g_x_entry, p_x_entry, summlabel)
-	calcbutton2.connect("clicked", on_decode_pressed, summlabel, summlabel2, summlabel3, summlabel4,summlabel5, fail_set_radio, fail_none_radio, p_x_entry,fail_entry)
+	calcbutton.connect("clicked", on_calcbutton_pressed, g_x_entry, p_x_entry, summlabel,reshlabel1,gxlabel,pxlabel)
+	calcbutton2.connect("clicked", on_decode_pressed, summlabel, summlabel2, summlabel3, summlabel4,summlabel5, fail_set_radio, fail_none_radio, p_x_entry,fail_entry,reshlabel2)
 
 
 	window.show_all()
