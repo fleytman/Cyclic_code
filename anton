@@ -17,11 +17,11 @@ def on_calcbutton_pressed(calcbutton, g_x_entry, p_x_entry, summlabel):
 	f_x_0=umnoj(g_x,p_x[0])
 	#print 'inform chast` umnoj: ',f_x_0
 	f_x=list(f_x_0)
-	
+
 	if can==1:
 		#print 'sozdana kopia umnoj inf chasti: ',f_x
 		f_x.extend(delenie(f_x_0,p_x))
-		
+
 		#print 'poluchen kod: ',f_x
 		i=0
 		f_x_chisl=0
@@ -30,15 +30,15 @@ def on_calcbutton_pressed(calcbutton, g_x_entry, p_x_entry, summlabel):
 			i+=1
 		#print 'Kod:'
 		#print f_x_chisl
-		
+
 		summ = f_x_chisl
 
 		summlabel.set_text(u"Кодовая комбинация = " + unicode(summ))
-	
-	if can==0:
-		summlabel.set_text(u"Затралил тибя лалка")
 
-def on_decode_pressed(calcbutton, summlabel, summlabel2, summlabel3, summlabel4, fail_set_radio, fail_none_radio, p_x_entry, fail_entry):
+	if can==0:
+		summlabel.set_text(u"Данное действие некорректно, так как наивысшая степень P(x) меньше k")
+
+def on_decode_pressed(calcbutton, summlabel, summlabel2, summlabel3, summlabel4, summlabel5, fail_set_radio, fail_none_radio, p_x_entry, fail_entry):
 	fail=0
 	g_x_0 = summlabel.get_text()
 	g_x=g_x_0[38:]
@@ -59,12 +59,13 @@ def on_decode_pressed(calcbutton, summlabel, summlabel2, summlabel3, summlabel4,
 ##			g_x_list[-x]=0
 
 		print 'g_x_list =',g_x_list
-		#g_x=v_stroku(g_x_list)
 
-		summlabel4.set_text(u"Ошибка в = " + unicode(x) + u" младшем разряде")
+		summlabel4.set_text(u"В слове с ошибкой в " + unicode(x) + u" младшем разряде")
+		summlabel5.set_text(u"Кодовая комбинация = "+ unicode(v_stroku(g_x_list)))
 
 	if fail_none_radio.get_active():
-		summlabel4.set_text("")
+		summlabel4.set_text("В слове без ошибки")
+		summlabel5.set_text(u"Кодовая комбинация = "+ unicode(v_stroku(g_x_list)))
 
 	g_x=trans(g_x_list)
 	print g_x
@@ -94,7 +95,7 @@ def v_stroku(g_x_list):
 	print g_x_list
 	i=0
 	g_x=''
-	while i<len(g_x_list)-1:
+	while i<len(g_x_list):
 		g_x+=str(g_x_list[i])
 		i+=1
 	return(g_x)
@@ -139,6 +140,7 @@ def trans(inp):
 		if int(inp[i])==1:
 			out.append(len(inp)-(i+1))
 		i+=1
+	print "out = ",out
 	return out
 
 def umnoj(n_x,p_x_first):
@@ -154,8 +156,8 @@ def proverka(gx_0,px_0):
 	px_0+=1
 	k = 0
 	while math.log(m+k+1,2) > k:
-		k+=1	
-	
+		k+=1
+
 	if px_0 < k:
 		print u"Данное действие некорректно"
         can = 0
@@ -180,12 +182,12 @@ def main():
 
 
 
-	g_x_label = gtk.Label(u"G(x) 1:")
+	g_x_label = gtk.Label(u"G(x):")
 	g_x_box.pack_start(g_x_label)
 	g_x_entry = gtk.Entry()
 	g_x_box.pack_start(g_x_entry)
 
-	p_x_label = gtk.Label(u"P(x) 1:")
+	p_x_label = gtk.Label(u"P(x):")
 	p_x_box.pack_start(p_x_label)
 	p_x_entry = gtk.Entry()
 	p_x_box.pack_start(p_x_entry)
@@ -194,8 +196,16 @@ def main():
 	calcbutton = gtk.Button(u"Закодировать")
 	mainbox.pack_start(calcbutton, expand=False)
 
-	summlabel = gtk.Label()
+	summlabel = gtk.Label("Кодовая комбинация =")
 	mainbox.pack_start(summlabel, expand=False)
+
+
+
+	summlabel4 = gtk.Label("")
+	mainbox.pack_start(summlabel4, expand=False)
+	summlabel5 = gtk.Label("")
+	mainbox.pack_start(summlabel5, expand=False)
+
 
 	fail_set_radio = gtk.RadioButton(None, u" ошибка")
 	mainbox.pack_start(fail_set_radio)
@@ -213,21 +223,22 @@ def main():
 
 
 
-	summlabel2 = gtk.Label()
+	calcbutton2 = gtk.Button(u"Декодировать")
+	mainbox.pack_start(calcbutton2, expand=False)
+
+	summlabel2 = gtk.Label("")
 	mainbox.pack_start(summlabel2, expand=False)
 
-	summlabel4 = gtk.Label()
-	mainbox.pack_start(summlabel4, expand=False)
+
 
 	summlabel3 = gtk.Label()
 	mainbox.pack_start(summlabel3, expand=False)
 
-	calcbutton2 = gtk.Button(u"Декодировать")
-	mainbox.pack_start(calcbutton2, expand=False)
+
 
 	window.connect("destroy", lambda _: gtk.main_quit())
 	calcbutton.connect("clicked", on_calcbutton_pressed, g_x_entry, p_x_entry, summlabel)
-	calcbutton2.connect("clicked", on_decode_pressed, summlabel, summlabel2, summlabel3, summlabel4, fail_set_radio, fail_none_radio, p_x_entry,fail_entry)
+	calcbutton2.connect("clicked", on_decode_pressed, summlabel, summlabel2, summlabel3, summlabel4,summlabel5, fail_set_radio, fail_none_radio, p_x_entry,fail_entry)
 
 
 	window.show_all()
