@@ -1,0 +1,281 @@
+# -*- coding: utf-8 -*-
+import random
+import math
+import string
+import gtk
+
+def on_calcbutton_pressed(calcbutton, g_x_entry, p_x_entry, summlabel,reshlabel1, gxlabel,pxlabel,gx1label,px1label):
+  can=1
+	g_x_inp =g_x_entry.get_text()
+	p_x_inp =p_x_entry.get_text()
+
+	g_x=trans(g_x_inp)
+	#print 'inform chast` transform: ',g_x
+	gx1label.set_text(u"Степени x'ов в G(x) = "+unicode(g_x))
+	p_x=trans(p_x_inp)
+	px1label.set_text(u"Максимальная степень пораждающего полинома = "+unicode(int(p_x[0])))
+##Максимальная степень пораждающего полинома =
+	#print 'porojd polinom transform: ',p_x
+	can=proverka(g_x[0],p_x[0])
+	f_x_0=umnoj(g_x,p_x[0])
+	#print 'inform chast` umnoj: ',f_x_0
+	f_x=list(f_x_0)
+
+	if can==1:
+		gxlabel.set_text(u"Степени x'ов в G(x)*x^"+unicode(int(p_x[0]))+u" ="+unicode(f_x))
+		pxlabel.set_text(u"Степени x'ов в P(x) = "+unicode(p_x))
+		print 'sozdana kopia umnoj inf chasti: ',f_x
+		f_x.extend(delenie(f_x_0,p_x,reshlabel1))
+
+		print 'poluchen kod: ',f_x
+		i=0
+		f_x_chisl=0
+		while i<len(f_x):
+			f_x_chisl+=10**f_x[i]
+			i+=1
+		#print 'Kod:'
+		#print f_x_chisl
+
+		summ = f_x_chisl
+
+		summlabel.set_text(u"Кодовая комбинация = " + unicode(summ))
+
+	if can==0:
+		summlabel.set_text(u"Данное действие некорректно, так как наивысшая степень P(x) меньше k")
+
+def on_decode_pressed(calcbutton, summlabel, summlabel2, summlabel3, summlabel4, summlabel5, fail_set_radio, fail_rand_radio, fail_none_radio, p_x_entry, fail_entry,reshlabel2):
+	fail=0
+	g_x_0 = summlabel.get_text()
+	g_x=g_x_0[38:]
+	g_x_list=list(g_x)
+	p_x=trans(p_x_entry.get_text())
+	print "p_x", p_x
+	if fail_set_radio.get_active():
+		change=0
+		x=int(fail_entry.get_text())
+		#print 'x =',x
+		print 'g_x_list =',g_x_list
+		if int(g_x_list[-x])==0:
+			g_x_list[-x]='1'
+##			g_x_list[-x]=1
+			change=1
+
+		if int(g_x_list[-x])==1 and change==0:
+			g_x_list[-x]='0'
+##			g_x_list[-x]=0
+
+		print 'g_x_list =',g_x_list
+
+		summlabel4.set_text(u"В слове с ошибкой в " + unicode(x) + u" младшем разряде")
+		summlabel5.set_text(u"Кодовая комбинация = "+ unicode(v_stroku(g_x_list)))
+
+	if fail_rand_radio.get_active():
+		change=0
+		x = random.randrange(1,len(g_x)+1)
+		#print 'x =',x
+		print 'g_x_list =',g_x_list
+		if int(g_x_list[-x])==0:
+			g_x_list[-x]='1'
+##			g_x_list[-x]=1
+			change=1
+
+		if int(g_x_list[-x])==1 and change==0:
+			g_x_list[-x]='0'
+##			g_x_list[-x]=0
+
+		print 'g_x_list =',g_x_list
+		summlabel4.set_text(u"В слове с ошибкой в " + unicode(x) + u" младшем разряде")
+		summlabel5.set_text(u"Кодовая комбинация = "+ unicode(v_stroku(g_x_list)))
+
+	if fail_none_radio.get_active():
+		summlabel4.set_text("В слове без ошибки")
+		summlabel5.set_text(u"Кодовая комбинация = "+ unicode(v_stroku(g_x_list)))
+
+	g_x=trans(g_x_list)
+	print g_x
+
+	r_x=delenie(g_x,p_x,reshlabel2)
+
+	i=0
+	r_x_out=0
+	while i<len(r_x):
+		r_x_out+=10**r_x[i]
+		i+=1
+
+	summlabel3.set_text(u"Остаток = " + unicode(r_x_out))
+
+	if r_x<>[]:
+		fail=1
+	if fail==0:
+		summlabel2.set_text(u"Ошибок нет")
+	if fail==1:
+		summlabel2.set_text(u"Найдена ошибка")
+
+def v_stroku(g_x_list):
+	print g_x_list
+	i=0
+	g_x=''
+	while i<len(g_x_list):
+		g_x+=str(g_x_list[i])
+		i+=1
+	return(g_x)
+
+def delenie(n_x,p_x,reshlabel): #функция деления
+	print u'Начинаем деление'
+	resh = u'Начинаем деление'+str(n_x)+u'на '+str(p_x)+'\n'
+	chastnoe=[] #создаем пустое частное
+	print 'delimoe =',n_x, 'chastnoe = ',chastnoe
+	resh+= u'делимое =' + str(n_x) + u'частное = ' + str(chastnoe) + "\n"
+	end=0
+	while end<>1:
+		if n_x[0]>=p_x[0]: #возможно деление?
+			chastnoe_kus=n_x[0]-p_x[0] #находим часть частного
+			chastnoe.append(chastnoe_kus) #добавляем в частное
+			i=0
+			while i<len(p_x): # выбираем что будем искать в информационной части
+				d=0
+				nahod=0
+				while d<len(n_x):# ищем в информационной части
+					if n_x[d]==(p_x[i]+chastnoe_kus): # если находим
+						n_x.pop(d)
+						nahod=1
+					d+=1
+				if nahod==0: #если не находим
+					n_x.append(p_x[i]+chastnoe_kus)
+				i+=1
+			chastnoe.sort(reverse=True)
+			n_x.sort(reverse=True)
+			print 'delimoe =',n_x, 'chastnoe = ',chastnoe
+			resh+= u'делимое =' + str(n_x) + u'частное = ' + str(chastnoe) + "\n"
+			if n_x==[]:
+				end=1
+			if n_x<>[]:
+				if n_x[0]<p_x[0]:
+					end=1
+	print 'ostatok: ',n_x,'chastnoe: ',chastnoe, 'delitel` :', p_x
+	resh+= u"остаток" + str(n_x) + u'частное: ' + str(chastnoe)
+	reshlabel.set_text(resh)
+	return n_x
+
+def trans(inp):
+	i=0
+	out=[]
+#перевод строчки в массив, для удобства работы с ним
+	while i<len(inp):#пока длинна числа больше 0
+		if int(inp[i])==1:
+			out.append(len(inp)-(i+1))
+		i+=1
+##	print "out = ",out
+	return out
+
+def umnoj(n_x,p_x_first):
+	i=0
+	while i<len(n_x):
+		n_x[i]=n_x[i]+p_x_first
+		i+=1
+	return(n_x)
+
+def proverka(gx_0,px_0):
+	##    k >= log(m+k+1,2)
+	m = gx_0+1
+	px_0+=1
+	k = 0
+	while math.log(m+k+1,2) > k:
+		k+=1
+
+	if px_0 < k:
+		print u"Данное действие некорректно"
+        can = 0
+	if px_0 >= k:
+		print u"Данное действие корректно"
+		can = 1
+	return can
+
+def main():
+	window = gtk.Window()
+	window.set_default_size(600,400)
+	window.set_title(u"Циклический код")
+
+	mainbox = gtk.VBox()
+	window.add(mainbox)
+
+	g_x_box = gtk.HBox()
+	mainbox.pack_start(g_x_box, expand=False)
+	p_x_box = gtk.HBox()
+	mainbox.pack_start(p_x_box, expand=False)
+
+
+
+	g_x_label = gtk.Label(u"G(x):")
+	g_x_box.pack_start(g_x_label)
+	g_x_entry = gtk.Entry()
+	g_x_box.pack_start(g_x_entry)
+
+	p_x_label = gtk.Label(u"P(x):")
+	p_x_box.pack_start(p_x_label)
+	p_x_entry = gtk.Entry()
+	p_x_box.pack_start(p_x_entry)
+
+	calcbutton = gtk.Button(u"Закодировать")
+	mainbox.pack_start(calcbutton, expand=False)
+
+	gx1label = gtk.Label(u"Степени x'ов в G(x)")
+	mainbox.pack_start(gx1label, expand=False)
+
+	pxlabel = gtk.Label(u"Степени x'ов в P(x)")
+	mainbox.pack_start(pxlabel, expand=False)
+
+	px1label = gtk.Label(u"Максимальная степень пораждающего полинома =")
+	mainbox.pack_start(px1label, expand=False)
+
+	gxlabel = gtk.Label(u"Степени x'ов в G(x)*x^k")
+	mainbox.pack_start(gxlabel, expand=False)
+
+
+	reshlabel1 = gtk.Label(u"Тут будет ход решение")
+	mainbox.pack_start(reshlabel1, expand=False)
+
+	summlabel = gtk.Label("Кодовая комбинация =")
+	mainbox.pack_start(summlabel, expand=False)
+
+	summlabel4 = gtk.Label("")
+	mainbox.pack_start(summlabel4, expand=False)
+	summlabel5 = gtk.Label("")
+	mainbox.pack_start(summlabel5, expand=False)
+
+	fail_rand_radio = gtk.RadioButton(None, u"Случайная ошибка")
+	mainbox.pack_start(fail_rand_radio)
+
+	fail_set_radio = gtk.RadioButton(fail_rand_radio, u"Ошибка в")
+	mainbox.pack_start(fail_set_radio)
+
+	fail_box = gtk.VBox()
+	mainbox.pack_start(fail_box, expand=False)
+
+	fail_entry = gtk.Entry()
+	fail_box.pack_start(fail_entry)
+
+	fail_none_radio = gtk.RadioButton(fail_rand_radio, u"Нет ошибки")
+	mainbox.pack_start(fail_none_radio)
+
+	reshlabel2 = gtk.Label(u"Тут будет ход решения")
+	mainbox.pack_start(reshlabel2, expand=False)
+
+	calcbutton2 = gtk.Button(u"Декодировать")
+	mainbox.pack_start(calcbutton2, expand=False)
+
+	summlabel2 = gtk.Label("")
+	mainbox.pack_start(summlabel2, expand=False)
+
+	summlabel3 = gtk.Label()
+	mainbox.pack_start(summlabel3, expand=False)
+
+	window.connect("destroy", lambda _: gtk.main_quit())
+	calcbutton.connect("clicked", on_calcbutton_pressed, g_x_entry, p_x_entry, summlabel,reshlabel1,gxlabel,pxlabel,gx1label,px1label)
+	calcbutton2.connect("clicked", on_decode_pressed, summlabel, summlabel2, summlabel3, summlabel4,summlabel5, fail_set_radio, fail_rand_radio, fail_none_radio, p_x_entry,fail_entry,reshlabel2)
+
+	window.show_all()
+	gtk.main()
+
+if __name__ == "__main__":
+	main()
