@@ -5,7 +5,7 @@ import string
 import gtk
 
 def on_calcbutton_pressed(calcbutton, g_x_entry, p_x_entry, summlabel,reshlabel1, gxlabel,pxlabel,gx1label,px1label):
-  can=1
+	can=1
 	g_x_inp =g_x_entry.get_text()
 	p_x_inp =p_x_entry.get_text()
 
@@ -190,6 +190,14 @@ def proverka(gx_0,px_0):
 		print u"Данное действие корректно"
 		can = 1
 	return can
+
+def step_vid(list): ##из списка целых чисел(int) получаем сумму x со степенями целых чисел из списка x^int
+	s = ""	
+	while a:
+		step_x=a.pop(0)
+		if s == "": s = "x^"+unicode(step_x)
+		else: s+= "+x^"+unicode(step_x)
+		print s
 
 def main():
 	window = gtk.Window()
