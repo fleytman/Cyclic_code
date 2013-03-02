@@ -12,7 +12,7 @@ def on_calcbutton_pressed(calcbutton, g_x_entry, p_x_entry, summlabel,reshlabel1
 	g_x=trans(g_x_inp)
 	#print 'inform chast` transform: ',g_x
 	print "Проверка ", g_x
-	gx1label.set_text(u"Степени x'ов в G(x) = "+step_vid(g_x))
+	gx1label.set_text(u"G(x) = "+step_vid(g_x))
 	print "Проверка ", g_x
 	p_x=trans(p_x_inp)
 	px1label.set_text(u"Максимальная степень пораждающего полинома = "+unicode(int(p_x[0])))
@@ -24,8 +24,8 @@ def on_calcbutton_pressed(calcbutton, g_x_entry, p_x_entry, summlabel,reshlabel1
 	f_x=list(f_x_0)
 
 	if can==1:
-		gxlabel.set_text(u"Степени x'ов в G(x)*x^"+unicode(int(p_x[0]))+u" ="+unicode(f_x))
-		pxlabel.set_text(u"Степени x'ов в P(x) = "+unicode(p_x))
+		gxlabel.set_text(u"G(x)*x^"+unicode(int(p_x[0]))+u" ="+step_vid(f_x))
+		pxlabel.set_text(u"P(x) = "+step_vid(p_x))
 		print 'sozdana kopia umnoj inf chasti: ',f_x
 		f_x.extend(delenie(f_x_0,p_x,reshlabel1))
 
@@ -124,10 +124,10 @@ def v_stroku(g_x_list):
 
 def delenie(n_x,p_x,reshlabel): #функция деления
 	print u'Начинаем деление'
-	resh = u'Начинаем деление'+str(n_x)+u'на '+str(p_x)+'\n'
+	resh = u'Начинаем деление'+step_vid(n_x)+u'на '+step_vid(p_x)+'\n'
 	chastnoe=[] #создаем пустое частное
 	print 'delimoe =',n_x, 'chastnoe = ',chastnoe
-	resh+= u'делимое =' + str(n_x) + u'частное = ' + str(chastnoe) + "\n"
+	resh+= u'делимое = ' + step_vid(n_x) + u'частное = ' + step_vid(chastnoe) + "\n"
 	end=0
 	while end<>1:
 		if n_x[0]>=p_x[0]: #возможно деление?
@@ -148,14 +148,14 @@ def delenie(n_x,p_x,reshlabel): #функция деления
 			chastnoe.sort(reverse=True)
 			n_x.sort(reverse=True)
 			print 'delimoe =',n_x, 'chastnoe = ',chastnoe
-			resh+= u'делимое =' + str(n_x) + u'частное = ' + str(chastnoe) + "\n"
+			resh+= u'делимое = ' + step_vid(n_x) + u'частное = ' + step_vid(chastnoe) + "\n"
 			if n_x==[]:
 				end=1
 			if n_x<>[]:
 				if n_x[0]<p_x[0]:
 					end=1
 	print 'ostatok: ',n_x,'chastnoe: ',chastnoe, 'delitel` :', p_x
-	resh+= u"остаток" + str(n_x) + u'частное: ' + str(chastnoe)
+	resh+= u"остаток" + step_vid(n_x) + u'частное: ' + step_vid(chastnoe)
 	reshlabel.set_text(resh)
 	return n_x
 
@@ -200,7 +200,7 @@ def step_vid(list1): ##из списка целых чисел(int) получа
 	while mylist:
 		step_x=mylist.pop(0) ## Степнь икс = нулевой элемент списка
 		if s == "": s = "x^"+unicode(step_x)
-		else: s+= "+x^"+unicode(step_x)
+		else: s+= " + x^"+unicode(step_x)
 		##print s
 	print s
 	return s
