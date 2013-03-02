@@ -11,7 +11,9 @@ def on_calcbutton_pressed(calcbutton, g_x_entry, p_x_entry, summlabel,reshlabel1
 
 	g_x=trans(g_x_inp)
 	#print 'inform chast` transform: ',g_x
-	gx1label.set_text(u"Степени x'ов в G(x) = "+unicode(g_x))
+	print "Проверка ", g_x
+	gx1label.set_text(u"Степени x'ов в G(x) = "+step_vid(g_x))
+	print "Проверка ", g_x
 	p_x=trans(p_x_inp)
 	px1label.set_text(u"Максимальная степень пораждающего полинома = "+unicode(int(p_x[0])))
 ##Максимальная степень пораждающего полинома =
@@ -165,7 +167,7 @@ def trans(inp):
 		if int(inp[i])==1:
 			out.append(len(inp)-(i+1))
 		i+=1
-##	print "out = ",out
+	print "Функция trans: out = ",out
 	return out
 
 def umnoj(n_x,p_x_first):
@@ -191,13 +193,17 @@ def proverka(gx_0,px_0):
 		can = 1
 	return can
 
-def step_vid(list): ##из списка целых чисел(int) получаем сумму x со степенями целых чисел из списка x^int
+def step_vid(list1): ##из списка целых чисел(int) получаем сумму x со степенями целых чисел из списка x^int
+	mylist = []
+	mylist = list(list1)
 	s = ""	
-	while a:
-		step_x=a.pop(0)
+	while mylist:
+		step_x=mylist.pop(0) ## Степнь икс = нулевой элемент списка
 		if s == "": s = "x^"+unicode(step_x)
 		else: s+= "+x^"+unicode(step_x)
-		print s
+		##print s
+	print s
+	return s
 
 def main():
 	window = gtk.Window()
